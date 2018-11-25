@@ -23,7 +23,7 @@ from carla.util import print_over_same_line
 
 def run_carla_client(args):
     # Here we will run 3 episodes with 300 frames each.
-    number_of_episodes = 5
+    number_of_episodes = 1
     frames_per_episode = 300
 
     # We assume the CARLA server is already waiting for a client to connect at
@@ -64,6 +64,28 @@ def run_carla_client(args):
                 # Set its position relative to the car in meters.
                 camera0.set_position(0.30, 0, 1.30)
                 settings.add_sensor(camera0)
+
+
+                ############# GETTING RIGHT CAMERA IMAGES
+                camera2 = Camera('CameraRGBRight')
+                # Set image resolution in pixels.
+                camera2.set_image_size(800, 600)
+                # Set its position relative to the car in meters.
+                camera2.set_position(-1.30, 1.30, 1.30)
+                camera2.set_rotation(pitch=0, yaw=90, roll=0)
+                settings.add_sensor(camera2)
+                #############
+
+                ############# GETTING LEFT CAMERA IMAGES
+                camera2 = Camera('CameraRGBLeft')
+                # Set image resolution in pixels.
+                camera2.set_image_size(800, 600)
+                # Set its position relative to the car in meters.
+                camera2.set_position(-1.30, -1.30, 1.30)
+                camera2.set_rotation(pitch=0, yaw=270, roll=0)
+                settings.add_sensor(camera2)
+                #############
+
 
                 # Let's add another camera producing ground-truth depth.
                 camera1 = Camera('CameraDepth', PostProcessing='Depth')
