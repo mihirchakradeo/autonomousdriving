@@ -14,7 +14,6 @@ Output is generated in a folder called _out, with a new folder per episode. Each
 - depthmap
 - lidar
 - segmentation: the images will appear black, a converter has to be used from Utils/ImageConverter to get the segmented image. 
-
   Usage: ./bin/image_converter -c semseg -i ../../PythonClient/_out/episode_0000/SemanticSegmentation/ -o output/folder
 
 
