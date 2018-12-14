@@ -16,12 +16,21 @@ import torch.nn.functional as F
 import glob
 
 import sys
+import os
+ROOT_PATH =  'save/experiment1/'
+CHECKPOINT_PATH = ROOT_PATH + 'checkpoints/'
+
+try:  
+    os.makedirs(CHECKPOINT_PATH)
+except OSError:  
+    print('Directory already exists!')
+
 # sys.path.insert(0,'./model/')
 
 # import models
 
 device = "cuda"
-
+num_epochs = 10
 
 # #### Helper methods
 
@@ -101,6 +110,7 @@ class CustomDataloader(data.Dataset):
     def __getitem__(self, index):
         id = self.id_dict[self.episode][index]
         label = self.label_dict[self.episode][index]
+        # images = cv2.imread("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/"+self.episode+"/CameraRGB/"+id)
         images = cv2.imread("/nfs/bigdisk/bsonawane/carla_dataset/"+self.episode+"/CameraRGB/"+id)
         images = self.transform(images)
         return images,label
@@ -154,22 +164,24 @@ loss_fn = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 def train(train_dirs, CustomDataloader, test_dirs):
-    limit = 5
-    for directory in (train_dirs):
-        if limit == 0:
-            break
-        limit -= 1
-        ep = directory.split("/")[-1]
-        custom_data = CustomDataloader(df, ep, flag='train')
-        train_loader = torch.utils.data.DataLoader(dataset=custom_data, batch_size=10)
-        #  Training
-        loss_arr = []
+    # limit = 5
+    for epoch in range(num_epochs):
+        c = 0
+        t = 0
         loss_arr2 = []
-        num_epochs = 10
-        print("EPISODE:", ep)
-        for epoch in range(num_epochs):
-            c = 0
-            t = 0
+        for directory in (train_dirs):
+            # if limit == 0:
+            #     break
+            # limit -= 1
+            ep = directory.split("/")[-1]
+            custom_data = CustomDataloader(df, ep, flag='train')
+            train_loader = torch.utils.data.DataLoader(dataset=custom_data, batch_size=10)
+            #  Training
+            loss_arr = []
+            
+            
+            # print("Episode:", ep)
+            
             for i, (images, labels) in enumerate(train_loader):
 
                 images = images.to(device)
@@ -188,10 +200,15 @@ def train(train_dirs, CustomDataloader, test_dirs):
                 optimizer.step()
 
             loss_arr2.append(np.mean(loss_arr))
-            print("Epoch: ",epoch, "Loss: {:.5f}".format((loss_arr2[-1])))
-            
-            test(model, test_dirs, CustomDataloader)
-            
+            print("Loss: ",loss_arr2[-1]," in episode: ",ep)
+
+        print("Epoch: ",epoch, "Train Loss: {:.5f}".format(np.mean(loss_arr2)))    
+        test(model, test_dirs, CustomDataloader)
+        
+        if epoch % 5 == 0:
+            torch.save(model.state_dict(), CHECKPOINT_PATH + 'cnn_base.model')
+
+
     return model
 
 
@@ -221,12 +238,12 @@ def test(model, test_dirs, CustomDataloader):
             loss = loss_fn(output, labels)
             loss_arr.append(loss.item())
 
-    print("Test Loss: {:.5f}".format(np.mean(loss_arr))
-
+    print("Test Loss: {:.5f}".format(np.mean(loss_arr)))
 
 # custom_data = CustomDataloader(df, "episode_0000", flag='train')
-limit = 5
 dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
+# dirs = sorted(glob.glob("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"))
+
 train_dirs = dirs[:-5]
 test_dirs = dirs[-5:]
 
