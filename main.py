@@ -17,6 +17,7 @@ import glob
 
 import sys
 import os
+
 ROOT_PATH =  'save/experiment1/'
 CHECKPOINT_PATH = ROOT_PATH + 'checkpoints/'
 
@@ -201,8 +202,10 @@ def train(train_dirs, CustomDataloader, test_dirs):
 
             loss_arr2.append(np.mean(loss_arr))
             print("Loss: ",loss_arr2[-1]," in episode: ",ep)
+            sys.stdout.flush()
 
-        print("Epoch: ",epoch, "Train Loss: {:.5f}".format(np.mean(loss_arr2)))    
+        print("Epoch: ",epoch, "Train Loss: {:.5f}".format(np.mean(loss_arr2)))
+        sys.stdout.flush()
         test(model, test_dirs, CustomDataloader)
         
         if epoch % 5 == 0:
@@ -239,6 +242,7 @@ def test(model, test_dirs, CustomDataloader):
             loss_arr.append(loss.item())
 
     print("Test Loss: {:.5f}".format(np.mean(loss_arr)))
+    sys.stdout.flush()
 
 # custom_data = CustomDataloader(df, "episode_0000", flag='train')
 dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
