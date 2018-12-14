@@ -16,7 +16,6 @@ class base_model(nn.Module):
             nn.ReLU(),
             nn.BatchNorm2d(48),
 
-
             nn.Conv2d(48, 64, 5, stride = 2, bias = False),
             nn.ReLU(),
             nn.BatchNorm2d(64),
@@ -27,18 +26,18 @@ class base_model(nn.Module):
         )
 
         self.linear_net = nn.Sequential(
-            nn.Linear(64 * 1 * 18, 100, bias = False),
+            nn.Linear(64 * 22 * 15, 100, bias = False),
             nn.ReLU(),
-            nn.Linear(100, 50, bias = False).
+            nn.Linear(100, 50, bias = False),
             nn.ReLU(),
-            nn.Linear(50, 10, bias = False).
+            nn.Linear(50, 10, bias = False),
             nn.ReLU(),
             nn.Linear(10, 1, bias = False)
         )
 
     def forward(self, x):
         x = self.conv_net(x)
-        x = x.view(x.shape(0), 64 * 1 * 18)
+        x = x.view(-1, 64 * 15 * 22)
         x = self.linear_net(x)
         return x
 
