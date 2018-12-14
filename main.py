@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 import cv2
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 import torch
 import torchvision
@@ -36,7 +36,8 @@ def get_measurements(file):
 # #### Data parsing
 
 # measure_path = "/home/bhushan/work/college/Fall18/projects/cv/CARLA/data/measurements/"
-measure_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/measurements/"
+# measure_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/measurements/"
+measure_path = '/nfs/bigdisk/bsonawane/carla_dataset/measurements/'
 
 # Loading measurement data
 speed_arr = []
@@ -53,7 +54,9 @@ for i in range(97):
         
 # Loading image data
 # img_dir_path = "/home/bhushan/work/college/Fall18/projects/cv/CARLA/data/episode*"
-img_dir_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"
+# img_dir_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"
+
+img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
 img_path = "/CameraRGB/*.png"
 
 
@@ -98,7 +101,7 @@ class CustomDataloader(data.Dataset):
     def __getitem__(self, index):
         id = self.id_dict[self.episode][index]
         label = self.label_dict[self.episode][index]
-        images = cv2.imread("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/"+self.episode+"/CameraRGB/"+id)
+        images = cv2.imread("/nfs/bigdisk/bsonawane/carla_dataset/"+self.episode+"/CameraRGB/"+id)
         images = self.transform(images)
         return images,label
 
@@ -218,12 +221,12 @@ def test(model, test_dirs, CustomDataloader):
             loss = loss_fn(output, labels)
             loss_arr.append(loss.item())
 
-        print("MSE LOSS: {:.5f}".format(loss_arr[-1]))
+    print("Test Loss: {:.5f}".format(np.mean(loss_arr))
 
 
 # custom_data = CustomDataloader(df, "episode_0000", flag='train')
 limit = 5
-dirs = sorted(glob.glob("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"))
+dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
 train_dirs = dirs[:-5]
 test_dirs = dirs[-5:]
 
