@@ -18,7 +18,7 @@ import glob
 import sys
 import os
 
-ROOT_PATH =  'save/experiment1/'
+ROOT_PATH =  'save/experiment2/'
 CHECKPOINT_PATH = ROOT_PATH + 'checkpoints/'
 
 try:  
@@ -47,7 +47,8 @@ def get_measurements(file):
 
 # measure_path = "/home/bhushan/work/college/Fall18/projects/cv/CARLA/data/measurements/"
 # measure_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/measurements/"
-measure_path = '/nfs/bigdisk/bsonawane/carla_dataset/measurements/'
+# measure_path = '/nfs/bigdisk/bsonawane/carla_dataset/measurements/'
+measure_path = '/home/nborude/CARLA_0.8.2/PythonClient/_out/measurements/'
 
 # Loading measurement data
 speed_arr = []
@@ -55,7 +56,7 @@ throttle_arr = []
 steer_arr = []
 
 # for file in glob.glob(path):
-for i in range(97):
+for i in range(len(os.listdir(measure_path))):
     with open(measure_path+str(i)+".txt") as file:
         speed,throttle,steer = get_measurements(file)
         speed_arr += (speed)
@@ -66,7 +67,8 @@ for i in range(97):
 # img_dir_path = "/home/bhushan/work/college/Fall18/projects/cv/CARLA/data/episode*"
 # img_dir_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"
 
-img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
+#img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
+img_dir_path = '/home/nborude/CARLA_0.8.2/PythonClient/_out/episode*'
 img_path = "/CameraRGB/*.png"
 
 
@@ -112,7 +114,8 @@ class CustomDataloader(data.Dataset):
         id = self.id_dict[self.episode][index]
         label = self.label_dict[self.episode][index]
         # images = cv2.imread("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/"+self.episode+"/CameraRGB/"+id)
-        images = cv2.imread("/nfs/bigdisk/bsonawane/carla_dataset/"+self.episode+"/CameraRGB/"+id)
+        # images = cv2.imread("/nfs/bigdisk/bsonawane/carla_dataset/"+self.episode+"/CameraRGB/"+id)
+        images = cv2.imread("/home/nborude/CARLA_0.8.2/PythonClient/_out/"+self.episode+"/CameraRGB/"+id)
         images = self.transform(images)
         return images,label
 
@@ -245,7 +248,9 @@ def test(model, test_dirs, CustomDataloader):
     sys.stdout.flush()
 
 # custom_data = CustomDataloader(df, "episode_0000", flag='train')
-dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
+# dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
+dirs = sorted(glob.glob("/home/nborude/CARLA_0.8.2/PythonClient/_out/episode*"))
+
 # dirs = sorted(glob.glob("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"))
 
 train_dirs = dirs[:-5]
