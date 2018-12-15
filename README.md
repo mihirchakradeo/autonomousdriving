@@ -7,6 +7,7 @@
   #### Execution steps
 
   1. run server: ./CarlaUE4.sh -carla-server -benchmark -fps=15 -windowed -ResX=800 -ResY=600
+  -  Add SDL_VIDEODRIVER=offscreen SDL_HINT_CUDA_DEVICE=0 before ./Carla to disable rendering
   2. run client: python client_example.py -i -q Low -a -l -sem
 
   #### Output Information
