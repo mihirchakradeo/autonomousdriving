@@ -56,7 +56,7 @@ throttle_arr = []
 steer_arr = []
 
 # for file in glob.glob(path):
-for i in range(97):
+for i in range(len(os.listdir(measure_path))):
     with open(measure_path+str(i)+".txt") as file:
         speed,throttle,steer = get_measurements(file)
         speed_arr += (speed)
