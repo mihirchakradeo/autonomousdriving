@@ -106,7 +106,7 @@ class CustomDataloader(data.Dataset):
                 self.label_dict[row.episode_number] = []
 
             self.id_dict[row.episode_number].append(row.center)
-            self.label_dict[row.episode_number].append(row.steer)
+            self.label_dict[row.episode_number].append([row.steer,row.speed])
         
     def __getitem__(self, index):
         id = self.id_dict[self.episode][index]
@@ -180,9 +180,7 @@ def train(train_dirs, CustomDataloader, test_dirs):
             #  Training
             loss_arr = []
             
-            
             # print("Episode:", ep)
-            
             for i, (images, labels) in enumerate(train_loader):
 
                 images = images.to(device)
@@ -193,6 +191,7 @@ def train(train_dirs, CustomDataloader, test_dirs):
                 output = model(images)
                 output = output.view(-1)
                 loss = loss_fn(output, labels)
+                loss = torch.sum(loss)
                 loss_arr.append(loss.item())
 
                 # Backward

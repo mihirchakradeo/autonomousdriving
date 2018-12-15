@@ -32,7 +32,7 @@ class base_model(nn.Module):
             nn.ReLU(),
             nn.Linear(50, 10, bias = False),
             nn.ReLU(),
-            nn.Linear(10, 1, bias = False)
+            nn.Linear(10, 2, bias = False)
         )
 
     def forward(self, x):
