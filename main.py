@@ -31,7 +31,7 @@ except OSError:
 # import models
 
 device = "cuda"
-num_epochs = 10
+num_epochs = 500
 
 # #### Helper methods
 
@@ -47,7 +47,8 @@ def get_measurements(file):
 
 # measure_path = "/home/bhushan/work/college/Fall18/projects/cv/CARLA/data/measurements/"
 # measure_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/measurements/"
-measure_path = '/nfs/bigdisk/bsonawane/carla_dataset/measurements/'
+# measure_path = '/nfs/bigdisk/bsonawane/carla_dataset/measurements/'
+measure_path = '/home/nborude/CARLA_0.8.2/PythonClient/_out/measurements/'
 
 # Loading measurement data
 speed_arr = []
@@ -55,7 +56,8 @@ throttle_arr = []
 steer_arr = []
 
 # for file in glob.glob(path):
-for i in range(97):
+# for i in range(97):
+for i in range(len(os.listdir(measure_path))):
     with open(measure_path+str(i)+".txt") as file:
         speed,throttle,steer = get_measurements(file)
         speed_arr += (speed)
@@ -66,7 +68,8 @@ for i in range(97):
 # img_dir_path = "/home/bhushan/work/college/Fall18/projects/cv/CARLA/data/episode*"
 # img_dir_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"
 
-img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
+# img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
+img_dir_path = '/home/nborude/CARLA_0.8.2/PythonClient/_out/episode*'
 img_path = "/CameraRGB/*.png"
 
 
@@ -110,9 +113,10 @@ class CustomDataloader(data.Dataset):
         
     def __getitem__(self, index):
         id = self.id_dict[self.episode][index]
-        label = self.label_dict[self.episode][index]
+        label = torch.tensor(self.label_dict[self.episode][index])
         # images = cv2.imread("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/"+self.episode+"/CameraRGB/"+id)
-        images = cv2.imread("/nfs/bigdisk/bsonawane/carla_dataset/"+self.episode+"/CameraRGB/"+id)
+        images = cv2.imread(img_dir_path+self.episode+"/CameraRGB/"+id)
+        images = cv2.imread('/home/nborude/CARLA_0.8.2/PythonClient/_out/'+self.episode+"/CameraRGB/"+id)
         images = self.transform(images)
         return images,label
 
@@ -150,7 +154,7 @@ class base_model(nn.Module):
             nn.ReLU(),
             nn.Linear(50, 10, bias = False),
             nn.ReLU(),
-            nn.Linear(10, 1, bias = False)
+            nn.Linear(10, 2, bias = False)
         )
 
     def forward(self, x):
@@ -186,12 +190,11 @@ def train(train_dirs, CustomDataloader, test_dirs):
                 images = images.to(device)
                 labels = labels.to(device)
                 labels = labels.type(torch.cuda.FloatTensor)
-
-                # Forward
+                
                 output = model(images)
-                output = output.view(-1)
+                # output = output.view(-1)
                 loss = loss_fn(output, labels)
-                loss = torch.sum(loss)
+                # loss = torch.sum(loss)
                 loss_arr.append(loss.item())
 
                 # Backward
@@ -244,11 +247,13 @@ def test(model, test_dirs, CustomDataloader):
     sys.stdout.flush()
 
 # custom_data = CustomDataloader(df, "episode_0000", flag='train')
-dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
+# dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
 # dirs = sorted(glob.glob("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"))
+dirs = sorted(glob.glob("/home/nborude/CARLA_0.8.2/PythonClient/_out/episode*"))
+
 
 train_dirs = dirs[:-5]
 test_dirs = dirs[-5:]
 
 model = train(train_dirs, CustomDataloader, test_dirs)
-test(model, test_dirs, CustomDataloader)
+# test(model, test_dirs, CustomDataloader)
