@@ -18,7 +18,7 @@ import glob
 import sys
 import os
 
-ROOT_PATH =  'save/experiment1/'
+ROOT_PATH =  'save/experiment2/'
 CHECKPOINT_PATH = ROOT_PATH + 'checkpoints/'
 
 try:  
@@ -56,7 +56,6 @@ throttle_arr = []
 steer_arr = []
 
 # for file in glob.glob(path):
-# for i in range(97):
 for i in range(len(os.listdir(measure_path))):
     with open(measure_path+str(i)+".txt") as file:
         speed,throttle,steer = get_measurements(file)
@@ -68,7 +67,7 @@ for i in range(len(os.listdir(measure_path))):
 # img_dir_path = "/home/bhushan/work/college/Fall18/projects/cv/CARLA/data/episode*"
 # img_dir_path = "/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"
 
-# img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
+#img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
 img_dir_path = '/home/nborude/CARLA_0.8.2/PythonClient/_out/episode*'
 img_path = "/CameraRGB/*.png"
 
@@ -115,8 +114,8 @@ class CustomDataloader(data.Dataset):
         id = self.id_dict[self.episode][index]
         label = torch.tensor(self.label_dict[self.episode][index])
         # images = cv2.imread("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/"+self.episode+"/CameraRGB/"+id)
-        images = cv2.imread(img_dir_path+self.episode+"/CameraRGB/"+id)
-        images = cv2.imread('/home/nborude/CARLA_0.8.2/PythonClient/_out/'+self.episode+"/CameraRGB/"+id)
+        # images = cv2.imread("/nfs/bigdisk/bsonawane/carla_dataset/"+self.episode+"/CameraRGB/"+id)
+        images = cv2.imread("/home/nborude/CARLA_0.8.2/PythonClient/_out/"+self.episode+"/CameraRGB/"+id)
         images = self.transform(images)
         return images,label
 
