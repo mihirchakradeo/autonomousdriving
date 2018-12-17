@@ -1,0 +1,55 @@
+Directory already exists!
+Epoch:  0 Train Loss: 0.17390
+Test Loss: 0.19423
+Epoch:  1 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  2 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  3 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  4 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  5 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  6 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  7 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  8 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  9 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  10 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  11 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  12 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  13 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  14 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  15 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  16 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  17 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  18 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  19 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  20 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  21 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  22 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  23 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  24 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  25 Train Loss: 0.17389
+Test Loss: 0.19423
+Epoch:  26 Train Loss: 0.17389
+Test Loss: 0.19423

@@ -69,6 +69,7 @@ for i in range(len(os.listdir(measure_path))):
 
 #img_dir_path = '/nfs/bigdisk/bsonawane/carla_dataset/episode*'
 img_dir_path = '/home/nborude/CARLA_0.8.2/PythonClient/_out/episode*'
+# img_dir_path = './temp_data/episode*'
 img_path = "/CameraRGB/*.png"
 
 
@@ -238,7 +239,8 @@ def test(model, test_dirs, CustomDataloader):
 
             # Forward
             output = model(images)
-            output = output.view(-1)
+            # output = output.view(-1)
+            # print(output.shape)
             loss = loss_fn(output, labels)
             loss_arr.append(loss.item())
 
@@ -249,10 +251,11 @@ def test(model, test_dirs, CustomDataloader):
 # dirs = sorted(glob.glob("/nfs/bigdisk/bsonawane/carla_dataset/episode*"))
 # dirs = sorted(glob.glob("/home/mihir/Downloads/CARLA_0.8.2/PythonClient/_out/episode*"))
 dirs = sorted(glob.glob("/home/nborude/CARLA_0.8.2/PythonClient/_out/episode*"))
+# dirs = sorted(glob.glob("./temp_data/episode*"))
 
 
-train_dirs = dirs[:-5]
-test_dirs = dirs[-5:]
+train_dirs = dirs[:-4]
+test_dirs = dirs[-4:]
 
 model = train(train_dirs, CustomDataloader, test_dirs)
-# test(model, test_dirs, CustomDataloader)
+test(model, test_dirs, CustomDataloader)

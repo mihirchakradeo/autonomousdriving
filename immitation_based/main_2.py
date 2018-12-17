@@ -17,7 +17,7 @@ import glob
 import sys
 import os
 
-ROOT_PATH =  'save/experiment2/'
+ROOT_PATH =  'save/experiment_all_controls/'
 CHECKPOINT_PATH = ROOT_PATH + 'checkpoints/'
 
 try:  
@@ -25,8 +25,8 @@ try:
 except OSError:  
     print('Directory already exists!')
 
-from models import immitation_model
-from data_loader import H5_DataLoader
+from models_2 import immitation_model
+from data_loader_2 import H5_DataLoader
 
 device = "cuda"
 num_epochs = 200
@@ -53,9 +53,15 @@ def train(train_dirs, CustomDataloader, test_dirs):
             # labels = torch.reshape(labels, (-1, 1))
             # labels = labels.type(torch.cuda.FloatTensor)
             
-            output = model(images)
-            output = output.view(-1)
-            loss = loss_fn(output, labels)
+            out_steer, out_speed, out_brake, out_acceleration = model(images)
+            #output = output.view(-1)
+            # labels: bx4
+            loss_steer = loss_fn(out_steer, labels[:,0])
+            loss_speed = loss_fn(out_speed, labels[:, 1])
+            loss_brake = loss_fn(out_brake, labels[:, 2])
+            loss_acceleration = loss_fn(out_acceleration, labels[:, 3])
+            loss = loss_steer + loss_speed + loss_brake + loss_acceleration
+
             # loss = torch.sum(loss)
             loss_arr.append(loss.item())
 
@@ -88,11 +94,17 @@ def test(model, test_dirs, CustomDataloader):
 
         images = images.to(device)
         labels = labels.to(device)
+        out_steer, out_speed, out_brake, out_acceleration = model(images)
+        #output = output.view(-1)
+        # labels: bx4
+        loss_steer = loss_fn(out_steer, labels[:,0])
+        loss_speed = loss_fn(out_speed, labels[:, 1])
+        loss_brake = loss_fn(out_brake, labels[:, 2])
+        loss_acceleration = loss_fn(out_acceleration, labels[:, 3])
+        loss = loss_steer + loss_speed + loss_brake + loss_acceleration
+
 
         # Forward
-        output = model(images)
-        output = output.view(-1)
-        loss = loss_fn(output, labels)
         loss_arr.append(loss.item())
 
     print("Test Loss: {:.5f}".format(np.mean(loss_arr)))
