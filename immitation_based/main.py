@@ -35,11 +35,18 @@ model = immitation_model().to(device)
 loss_fn = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
+train_dirs = '/nfs/bigdisk/bsonawane/Carla_Imitation_Learning/AgentHuman/SeqTrain/'
+test_dirs = '/nfs/bigdisk/bsonawane/Carla_Imitation_Learning/AgentHuman/test/'
+
+custom_data = H5_DataLoader(test_dirs)
+test_loader = torch.utils.data.DataLoader(dataset=custom_data, batch_size=10)
+
+
 def train(train_dirs, CustomDataloader, test_dirs):
     # limit = 5
     custom_data = CustomDataloader(train_dirs)
     train_loader = torch.utils.data.DataLoader(dataset=custom_data, batch_size=10)
-
+    print('Dataset loaded:', len(train_loader))
     for epoch in range(num_epochs):
         loss_arr2 = []
         
@@ -47,7 +54,6 @@ def train(train_dirs, CustomDataloader, test_dirs):
         loss_arr = []
         
         for i, (images, labels) in enumerate(train_loader):
-            # print(images.shape, labels.shape)
             images = images.to(device)
             labels = torch.tensor(labels).to(device)
             # labels = torch.reshape(labels, (-1, 1))
@@ -70,18 +76,16 @@ def train(train_dirs, CustomDataloader, test_dirs):
 
         print("Epoch: ",epoch, "Train Loss: {:.5f}".format(np.mean(loss_arr2)))
         sys.stdout.flush()
-        test(model, test_dirs, CustomDataloader)
+        test(model, test_dirs)
         
         if epoch % 5 == 0:
             torch.save(model.state_dict(), CHECKPOINT_PATH + 'cnn_base.model')
     return model
 
 
-def test(model, test_dirs, CustomDataloader):
+def test(model, test_dirs):
     loss_arr = []
     
-    custom_data = CustomDataloader(test_dirs)
-    test_loader = torch.utils.data.DataLoader(dataset=custom_data, batch_size=10)
     #  Testing
     
     for i, (images, labels) in enumerate(test_loader):
@@ -99,8 +103,5 @@ def test(model, test_dirs, CustomDataloader):
     sys.stdout.flush()
 
 
-train_dirs = '/nfs/bigdisk/bsonawane/Carla_Imitation_Learning/AgentHuman/SeqTrain/'
-test_dirs = '/nfs/bigdisk/bsonawane/Carla_Imitation_Learning/AgentHuman/SeqVal/'
-
 model = train(train_dirs, H5_DataLoader, test_dirs)
-test(model, test_dirs, H5_DataLoader)
+test(model, test_dirs)

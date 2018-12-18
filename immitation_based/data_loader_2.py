@@ -10,10 +10,15 @@ class H5_DataLoader(data.Dataset):
 
         self.images = []
         self.labels = []
-
+        
+        # Temp restrict to only 1,00,000 images
+        i = 0
         for file in data:
             try:
                 image_file = h5py.File(file, 'r')
+                if i == 500:
+                    break
+                i += 1
                 for i in range(200):
                     self.images.append(image_file['rgb'][i])
                     self.labels.append(image_file['targets'][i])

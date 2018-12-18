@@ -32,6 +32,7 @@ device = "cuda"
 num_epochs = 200
 
 model = immitation_model().to(device)
+model.load_state_dict(torch.load(ROOT_PATH+'checkpoints_full_data_25_epochs/cnn_base.model'))
 loss_fn = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
@@ -39,7 +40,7 @@ def train(train_dirs, CustomDataloader, test_dirs):
     # limit = 5
     custom_data = CustomDataloader(train_dirs)
     train_loader = torch.utils.data.DataLoader(dataset=custom_data, batch_size=10)
-
+    print('Dataset loaded:' , len(train_loader))
     for epoch in range(num_epochs):
         loss_arr2 = []
         
